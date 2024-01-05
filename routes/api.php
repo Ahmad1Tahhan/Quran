@@ -2,13 +2,16 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\ResultController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ClientAnswersController;
 use App\Http\Controllers\InterpretationController;
+use App\Http\Controllers\Client\AuthClientAnswerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,8 +67,31 @@ Route::get('showAnswer/{id}',[AnswerController::class,'show']);
 Route::put('updateAnswer/{id}',[AnswerController::class,'update']);
 Route::delete('deleteAnswer/{id}',[AnswerController::class,'destroy']);
 
+
 Route::post('createClientAnswer',[ClientAnswersController::class,'store']);
 Route::get('getClientAnswers',[ClientAnswersController::class,'index']);
 Route::get('showClientAnswer/{id}',[ClientAnswersController::class,'show']);
 Route::put('updateClientAnswer/{id}',[ClientAnswersController::class,'update']);
 Route::delete('deleteClientAnswer/{id}',[ClientAnswersController::class,'destroy']);
+
+Route::post('createResult',[ResultController::class,'store']);
+Route::get('getResults',[ResultController::class,'index']);
+Route::get('showResult/{id}',[ResultController::class,'show']);
+Route::put('updateResult/{id}',[ResultController::class,'update']);
+Route::delete('deleteResult/{id}',[ResultController::class,'destroy']);
+
+
+
+//this is a test
+Route::get('searchTest/{src}',[TestController::class,'search']);
+
+
+Route::post('login',[AuthController::class,'login']);
+Route::post('register',[AuthController::class,'register']);
+
+
+//Authenticated user answer questions.
+Route::middleware('auth.client')->group(function(){
+    Route::post('answerQuestion',[AuthClientAnswerController::class,'answerQuestion']);
+    
+});

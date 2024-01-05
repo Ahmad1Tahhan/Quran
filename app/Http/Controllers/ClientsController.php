@@ -11,14 +11,14 @@ class ClientsController extends Controller
     function create(Request $request){
         $fields = $request->validate([
             'username' =>'required|min:3|max:20|string',
-            'phone_number'=>'required|digits:10'
-        ]);
+            'phone_number'=>'unique|required|digits:10'
+        ]); 
         $client = Client::create($fields);
         return response()->json(['message'=>'Client created successfully.','Client:'=>$client]);
     }
 
     function index(){
-        $clients = Client::all();
+        $clients = Client::all();               
         if(!$clients)
             return response()->json(["message"=>"No clients registered."]);
         else

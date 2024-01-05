@@ -14,7 +14,7 @@ class InterpretationController extends Controller
     public function index()
     {
         $interpretations = Interpretation::all();
-        if(sizeof($interpretations)==0)
+        if(sizeof($interpretations)==0) 
             return response()->json(["message"=>"No interpretations found."]);
         else    
             return response()->json(["Interpretations"=>$interpretations]);
@@ -30,7 +30,7 @@ class InterpretationController extends Controller
         ]);
         $interpretation = Interpretation::create($fields);
         return response()->json(["message"=>"Interpretation created successfully",
-                                 "interpretation"=>$interpretation]);
+                                                                                                         "interpretation"=>$interpretation]);
     }
 
     /**

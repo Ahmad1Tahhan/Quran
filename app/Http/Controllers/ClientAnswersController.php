@@ -32,6 +32,37 @@ class ClientAnswersController extends Controller
         if(!$answer)
         return response()->json(["Error"=>"The answer with the given id was not found."],404);
         
+
+
+        $tests = Test::where('id',$request->test_id)->with('questions')->get();
+        $isQuestionFound = false;
+        foreach($tests[0]->questions as $question){
+            if($question->id == $request->question_id){
+                $isQuestionFound = true;
+                break;
+            }
+        }
+
+        if(!$isQuestionFound)
+        return response()->json(['Error'=>'The question you provided does not belong to that test.']);
+
+        $questions = Question::where('id',$request->question_id)->with('answers')->get();
+        $isAnswerFound = false;
+        foreach($questions[0]->answers as $answer){
+            if($answer->id == $request->answer_id){
+                $isAnswerFound = true;
+                break;
+            }
+        }
+        if(!$isAnswerFound)
+        return response()->json(['Error'=>'The answer you provided does not belong to that question.']);
+        $client = Client::with('client_answers')->get();
+        foreach($client[0]->client_answers as $client_answer){
+            if($client_answer->test_id==$request->test_id && $client_answer->question_id ==$request->question_id)
+            return response()->json(["Error" =>"Already submitted answer to that question."]);
+        }
+        
+
         $client_answer = client_answer::create($fields);
         return response()->json(["Message"=>"Client answer created successfullly.","Client answer"=>$client_answer]);
     }
@@ -77,6 +108,7 @@ class ClientAnswersController extends Controller
             if(!$answer)
             return response()->json(["Error"=>"The answer with the given id was not found."],404);
         }
+
        $client_answer->forceFill($fields);
        $client_answer->save();
        return response()->json(["Message"=>"Updated client answer successfully","Client answer"=>$client_answer]);

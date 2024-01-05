@@ -26,7 +26,7 @@ class QuestionController extends Controller
                                 ,"Question"=>$question]);
     }
     public function index(){
-        $questions = Question::all();
+        $questions = Question::with('answers')->get();
         if(sizeof($questions)==0)
         return response()->json(['Error'=>'No questions found']);
         else

@@ -12,12 +12,21 @@ class AnswerController extends Controller
     public function store(Request $request){
         $fields = $request->validate([
             'answer_text'=>'required|string',
-            'question_id'=>'required|integer'
+            'question_id'=>'required|integer',
+            'correct'=>'required|boolean'
         ]);
-        $question = Question::find($request->question_id);
+        $question = Question::with('answers')->where('id','=',$request->question_id)->get();
         if(!$question)
         return response()->json(["Error"=>"The question with the given id was not found."]);
+        
+        if($request->correct==true)
+        foreach ($question[0]->answers as $answers) {
+            if($answers->correct==true)
+            return response()->json(['Error'=>'There is already a correct answer']);
+        }
+
         $answer = Answer::create($fields);
+
         return response()->json(["Message"=>"Created answer successfully.","Answer"=>$answer]);
     }
     public function index(){
@@ -37,7 +46,8 @@ class AnswerController extends Controller
     public function update(Request $request,$id){
         $fields = $request->validate([
             'answer_text'=>'string',
-            'question_id'=>'integer'
+            'question_id'=>'integer',
+            'correct'=>'boolean'
         ]);
         $answer = Answer::find($id);
         if(!$answer)
@@ -46,6 +56,12 @@ class AnswerController extends Controller
             $question = Question::find($request->question_id);
             if(!$question)
             return response()->json(["Error"=>"The question with the given id was not found."],404);   
+        }
+        if($request->correct)
+        if($request->correct==true)
+        foreach ($question[0]->answers as $answers) {
+            if($answers->correct==true)
+            return response()->json(['Error'=>'There is already a correct answer']);
         }
         $answer->forceFill($fields);
         $answer->save();

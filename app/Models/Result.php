@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Result extends Model
 {
     use HasFactory;
+    protected $fillable = ['test_id','client_id','degree'];
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

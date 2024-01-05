@@ -68,4 +68,10 @@ class TestController extends Controller
         $test->delete();
         return response()->json(["Message"=>"Test deleted successfully."]);
     }
+    public function search($src){
+        $test = Test::where('type','LIKE','%'.$src.'%')->get();
+        if(!$test)
+        return response('not found');
+        return response($test);
+    }
 }

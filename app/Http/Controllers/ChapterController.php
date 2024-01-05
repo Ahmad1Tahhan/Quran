@@ -12,7 +12,7 @@ class ChapterController extends Controller
      */
     public function index()
     {
-        $chapters = Chapter::all();
+        $chapters = Chapter::get();
         if(!$chapters)
             return response()->json(["message"=>"No chapters found."]);
         else    
@@ -44,8 +44,8 @@ class ChapterController extends Controller
             return response()->json(["Chapter"=>$chapter]);
     }
 
-    /**
-     * Update the specified resource in storage.
+    /*.369*;
+     * Updajr\147te the specified resource in storage.
      */
     public function update(Request $request, $id)
     {

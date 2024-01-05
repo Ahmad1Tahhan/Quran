@@ -9,4 +9,14 @@ class Test extends Model
 {
     use HasFactory;
     protected $fillable=['test_number','type','question_count','chapt_id'];
+
+    public function chapter(){
+        return $this->belongsTo(Chapter::class);
+    }
+    public function questions(){
+        return $this->hasMany(Question::class,'test_id');
+    }
+    public function client_answers(){
+        return $this->hasMany(client_answer::class,'test_id');
+    }
 }
