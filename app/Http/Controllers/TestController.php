@@ -50,12 +50,12 @@ class TestController extends Controller
                 'chapt_id'=>'integer',
                 'type'=>'string|in:quiz,exam'
             ]);
-            
-            if(!Chapter::find($request->chapt_id))
+            if($request->chapt_id){
+            $chapter = Chapter::find($request->chapt_id);
+            if(!$chapter)
             return response()->json(["Error"=>"The chapter with the given id was not found."],404);
-            
+            }
             $test->forceFill($fields);
-            
             $test->save();
             return response()->json(["Message"=>"Test updated successfully","Test"=>$test]);
         }
@@ -68,8 +68,8 @@ class TestController extends Controller
         $test->delete();
         return response()->json(["Message"=>"Test deleted successfully."]);
     }
-    public function search($src){
-        $test = Test::where('type','LIKE','%'.$src.'%')->get();
+    public function search($search){
+        $test = Test::where('type','LIKE','%'.$search.'%')->get();
         if(!$test)
         return response('not found');
         return response($test);

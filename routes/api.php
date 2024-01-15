@@ -27,9 +27,9 @@ use App\Http\Controllers\Client\AuthClientAnswerController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('createClient',[ClientsController::class,'create']);
+Route::post('createClient',[ClientsController::class,'store']);
 Route::get('getClients',[ClientsController::class,'index']);
-Route::get('showClient/{id}',[ClientsController::class,'getOne']);
+Route::get('showClient/{id}',[ClientsController::class,'show']);
 Route::put('updateClient/{id}',[ClientsController::class,'update']);
 Route::delete('deleteClient/{id}',[ClientsController::class,'destroy']);
 
@@ -53,13 +53,14 @@ Route::get('getTests',[TestController::class,'index']);
 Route::get('showTest/{id}',[TestController::class,'show']);
 Route::put('updateTest/{id}',[TestController::class,'update']);
 Route::delete('deleteTest/{id}',[TestController::class,'destroy']);
+//this is a test
+Route::get('searchTest/{src}',[TestController::class,'search']);
 
 Route::post('createQuestion',[QuestionController::class,'store']);
 Route::get('getQuestions',[QuestionController::class,'index']);
 Route::get('showQuestion/{id}',[QuestionController::class,'show']);
 Route::put('updateQuestion/{id}',[QuestionController::class,'update']);
 Route::delete('deleteQuestion/{id}',[QuestionController::class,'destroy']);
-
 
 Route::post('createAnswer',[AnswerController::class,'store']);
 Route::get('getAnswers',[AnswerController::class,'index']);
@@ -82,8 +83,7 @@ Route::delete('deleteResult/{id}',[ResultController::class,'destroy']);
 
 
 
-//this is a test
-Route::get('searchTest/{src}',[TestController::class,'search']);
+
 
 
 Route::post('login',[AuthController::class,'login']);
@@ -93,5 +93,6 @@ Route::post('register',[AuthController::class,'register']);
 //Authenticated user answer questions.
 Route::middleware('auth.client')->group(function(){
     Route::post('answerQuestion',[AuthClientAnswerController::class,'answerQuestion']);
-    
+    Route::post('storeAnswers',[AuthClientAnswerController::class,'storeAnswers']);
+    Route::post('storeResult',[AuthClientAnswerController::class,'storeResult']);
 });

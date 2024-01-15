@@ -33,7 +33,7 @@ class QuestionController extends Controller
         return response()->json(["Questions"=>$questions]);
     }
     public function show($id){
-        $question = Question::find($id);
+        $question = Question::with('answers')->where('id',$id)->get()->first();
         if(!$question)
         return response()->json(["Error"=>"The question with the given id was not found."]);
         else
@@ -65,6 +65,7 @@ class QuestionController extends Controller
         }
         
         label:
+        $fields['test_id']=intval($fields['test_id']);
         $question->forceFill($fields);
         $question->save();
         

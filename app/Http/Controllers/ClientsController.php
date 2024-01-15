@@ -8,10 +8,10 @@ use Illuminate\Routing\Controller;
 
 class ClientsController extends Controller
 {
-    function create(Request $request){
+    function store(Request $request){
         $fields = $request->validate([
             'username' =>'required|min:3|max:20|string',
-            'phone_number'=>'unique|required|digits:10'
+            'phone_number'=>'unique:clients|required|digits:10'
         ]); 
         $client = Client::create($fields);
         return response()->json(['message'=>'Client created successfully.','Client:'=>$client]);
@@ -25,7 +25,7 @@ class ClientsController extends Controller
             return response()->json(["Clients"=>$clients]);
     }
 
-    function getOne($id){
+    function show($id){
         $client = Client::find($id);
         if(!$client)
             return response()->json(["message"=>"The client with the given id was not found."],404);
@@ -38,7 +38,7 @@ class ClientsController extends Controller
         $fields = $request->validate([
             'username' =>'min:3|max:20|string',
             'phone_number'=>'digits:10'
-        ]);
+        ]); 
         $client = Client::find($id);
         if(!$client)
             return response()->json(["message:"=>"The client requested with the given id was not found."],404);
