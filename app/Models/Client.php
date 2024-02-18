@@ -11,12 +11,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Client extends Authenticatable implements JWTSubject
 {
-    use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
     protected $fillable = [
         'username',
         'phone_number',
+        'role'
     ];
-    
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -24,12 +25,14 @@ class Client extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [];
+        return ['role' => $this->role];
     }
-    public function client_answers(){
-        return $this->hasMany(client_answer::class,'client_id');
+    public function client_answers()
+    {
+        return $this->hasMany(client_answer::class, 'client_id');
     }
-    public function results(){
-        return $this->hasMany(Result::class,'client_id');
+    public function results()
+    {
+        return $this->hasMany(Result::class, 'client_id');
     }
 }

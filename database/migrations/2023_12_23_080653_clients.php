@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("username")->nullable(false)->min(3)->max(20);
             $table->string("phone_number",10)->nullable(false)->unique();
+            $table->string("role")->nullable(false);
             $table->timestamps();
         });
     }

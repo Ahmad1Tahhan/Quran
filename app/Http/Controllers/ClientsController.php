@@ -11,7 +11,8 @@ class ClientsController extends Controller
     function store(Request $request){
         $fields = $request->validate([
             'username' =>'required|min:3|max:20|string',
-            'phone_number'=>'unique:clients|required|digits:10'
+            'phone_number'=>'unique:clients|required|digits:10',
+            'role'=>'required|string'
         ]); 
         $client = Client::create($fields);
         return response()->json(['message'=>'Client created successfully.','Client:'=>$client]);

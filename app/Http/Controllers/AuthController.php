@@ -21,7 +21,6 @@ class AuthController extends Controller
                 "Error"=>"The client with the given phone number was not found.",
             ],401);
         }
-        
         $token = JWTAuth::fromUser($client);
         return response()->json([
             'client'=>$client,
@@ -39,7 +38,7 @@ class AuthController extends Controller
         $client = Client::where('phone_number',$request->phone_number)->first();
         if($client)
         return response()->json(["Error"=>"Phone number already taken"]);;
-
+        $fields['role'] = 'student';
         $client = Client::create($fields);
         $token = JWTAuth::fromUser($client);
         return response()->json([

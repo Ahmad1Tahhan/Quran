@@ -24,7 +24,6 @@ class Auth
         if(!$token)
         return response()->json(['error' => 'Unauthorized'], 401);
 
-        // dd($token);
         
         $request->userId = $token['sub'];
         // dd($request->userId);

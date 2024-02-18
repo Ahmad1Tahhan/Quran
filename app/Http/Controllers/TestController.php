@@ -10,8 +10,6 @@ use PDO;
 
 class TestController extends Controller
 {
-    // public $quiz="quiz";
-    // public $exam="exam";
     public function store(Request $request){
 
         
