@@ -10,8 +10,10 @@ use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ClientAnswersController;
+use App\Http\Controllers\Client\ProfileController;
 use App\Http\Controllers\InterpretationController;
 use App\Http\Controllers\Client\AuthClientAnswerController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,4 +110,12 @@ Route::middleware('auth.client')->group(function () {
     Route::post('answerQuestion', [AuthClientAnswerController::class, 'answerQuestion']);
     Route::post('storeAnswers', [AuthClientAnswerController::class, 'storeAnswers']);
     Route::post('storeResult', [AuthClientAnswerController::class, 'storeResult']);
+});
+Route::prefix('admin')->group(function () {
+    Route::post('signup',[AdminAuthController::class,'register']);
+});
+
+
+Route::prefix('student')->group(function () {
+    Route::get('getProfile',[ProfileController::class,'getProfile']);
 });
