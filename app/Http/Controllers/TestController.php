@@ -10,68 +10,72 @@ use PDO;
 
 class TestController extends Controller
 {
-    public function store(Request $request){
-
-        
+    public function store(Request $request)
+    {
         $fields = $request->validate([
-            'test_number'=>'required|integer|unique:tests',
-            'chapt_id'=>'required|integer',
-            'type'=>'required|string|in:quiz,exam',
-            'time'=>'integer'
+            'test_number' => 'required|integer|unique:tests',
+            'chapt_id' => 'required|integer',
+            'type' => 'required|string|in:quiz,exam',
+            'time' => 'integer'
         ]);
-        if(!Chapter::find($request->chapt_id))
-        return response()->json(["Error"=>"The chapter with the given id was not found."],404);
+        if (!Chapter::find($request->chapt_id))
+            return response()->json(["Error" => "The chapter with the given id was not found."], 404);
 
         $test = Test::create($fields);
-        return response()->json(["message"=>"Created test successfully.","Test"=>$test]);
-    }   
-    public function index(){
-        $tests =Test::all();
-        if(sizeof($tests)==0)
-        return response()->json(["Error"=>"No tests found."],404);
-        else
-        return response()->json(["Tests"=>$tests]);
+        return response()->json(["message" => "Created test successfully.", "Test" => $test]);
     }
-    public function show($id){
-        $test = Test::find($id);
-        if(!$test)
-        return response()->json(["Error"=>"The test with the given id was not found."],404);
+    public function index()
+    {
+        $tests = Test::all();
+        if (sizeof($tests) == 0)
+            return response()->json(["Error" => "No tests found."], 404);
         else
-        return response()->json(["Test"=>$test]);
+            return response()->json(["Tests" => $tests]);
     }
-    public function update(Request $request,$id){
+    public function show($id)
+    {
         $test = Test::find($id);
-        if(!$test)
-        return response()->json(["Error"=>"The test with the given id was not found."],404);
-        else{
+        if (!$test)
+            return response()->json(["Error" => "The test with the given id was not found."], 404);
+        else
+            return response()->json(["Test" => $test]);
+    }
+    public function update(Request $request, $id)
+    {
+        $test = Test::find($id);
+        if (!$test)
+            return response()->json(["Error" => "The test with the given id was not found."], 404);
+        else {
             $fields = $request->validate([
-                'test_number'=>'integer|unique:tests',
-                'chapt_id'=>'integer',
-                'type'=>'string|in:quiz,exam',
-                'time'=>'integer'
+                'test_number' => 'integer|unique:tests',
+                'chapt_id' => 'integer',
+                'type' => 'string|in:quiz,exam',
+                'time' => 'integer'
             ]);
-            if($request->chapt_id){
-            $chapter = Chapter::find($request->chapt_id);
-            if(!$chapter)
-            return response()->json(["Error"=>"The chapter with the given id was not found."],404);
+            if ($request->chapt_id) {
+                $chapter = Chapter::find($request->chapt_id);
+                if (!$chapter)
+                    return response()->json(["Error" => "The chapter with the given id was not found."], 404);
             }
             $test->forceFill($fields);
             $test->save();
-            return response()->json(["Message"=>"Test updated successfully","Test"=>$test]);
+            return response()->json(["Message" => "Test updated successfully", "Test" => $test]);
         }
     }
-    public function destroy($id){
+    public function destroy($id)
+    {
         $test = Test::find($id);
-        if(!$test)
-        return response()->json(["Error"=>"The test with the given id was not found."],404);
-        
+        if (!$test)
+            return response()->json(["Error" => "The test with the given id was not found."], 404);
+
         $test->delete();
-        return response()->json(["Message"=>"Test deleted successfully."]);
+        return response()->json(["Message" => "Test deleted successfully."]);
     }
-    public function search($search){
-        $test = Test::where('type','LIKE','%'.$search.'%')->get();
-        if(!$test)
-        return response('not found');
+    public function search($search)
+    {
+        $test = Test::where('type', 'LIKE', '%' . $search . '%')->get();
+        if (sizeof($test) == 0)
+            return response('not found');
         return response($test);
     }
 }
