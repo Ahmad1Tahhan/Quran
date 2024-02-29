@@ -16,7 +16,8 @@ class TestController extends Controller
         $fields = $request->validate([
             'test_number'=>'required|integer|unique:tests',
             'chapt_id'=>'required|integer',
-            'type'=>'required|string|in:quiz,exam'
+            'type'=>'required|string|in:quiz,exam',
+            'time'=>'integer'
         ]);
         if(!Chapter::find($request->chapt_id))
         return response()->json(["Error"=>"The chapter with the given id was not found."],404);
@@ -46,7 +47,8 @@ class TestController extends Controller
             $fields = $request->validate([
                 'test_number'=>'integer|unique:tests',
                 'chapt_id'=>'integer',
-                'type'=>'string|in:quiz,exam'
+                'type'=>'string|in:quiz,exam',
+                'time'=>'integer'
             ]);
             if($request->chapt_id){
             $chapter = Chapter::find($request->chapt_id);

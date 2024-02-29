@@ -29,7 +29,7 @@ class ChapterController extends Controller
         $fields = $request->validate([
             'chapt_number'=>'required|integer|unique:chapters'
         ]);
-        return $request;
+        
         $chapter = Chapter::create($fields);
         return response()->json(["message"=>"Chapter created successfully",
                                  "chapter"=>$chapter]);

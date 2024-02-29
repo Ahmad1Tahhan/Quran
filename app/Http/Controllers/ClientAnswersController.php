@@ -121,4 +121,8 @@ class ClientAnswersController extends Controller
         $client_answer->delete();
         return response()->json(["Message"=>"Client answer deleted successfully"]);
     }
+    public function getTestResults(Request $request){
+        $client_answers = client_answer::where("client_id",$request->userId)->with('question','answer')->get();
+        return response($client_answers);
+    }
 }

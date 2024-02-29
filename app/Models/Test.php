@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Test extends Model
 {
     use HasFactory;
-    protected $fillable=['test_number','type','question_count','chapt_id'];
+    protected $fillable=['test_number','type','question_count','chapt_id','time'];
 
     public function chapter(){
         return $this->belongsTo(Chapter::class);

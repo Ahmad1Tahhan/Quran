@@ -10,7 +10,7 @@ use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ClientAnswersController;
-use App\Http\Controllers\Client\ProfileController;
+use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\InterpretationController;
 use App\Http\Controllers\Client\AuthClientAnswerController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
@@ -38,31 +38,30 @@ Route::middleware('auth.admin')->group(function () {
     Route::delete('deleteClient/{id}', [ClientsController::class, 'destroy']);
 
     Route::post('createChapter', [ChapterController::class, 'store']);
-    
-    
+
+
     Route::put('updateChapter/{id}', [ChapterController::class, 'update']);
     Route::delete('deleteChapter/{id}', [ChapterController::class, 'destroy']);
 
     Route::post('createTest', [TestController::class, 'store']);
-Route::put('updateTest/{id}', [TestController::class, 'update']);
-Route::delete('deleteTest/{id}', [TestController::class, 'destroy']);
+    Route::put('updateTest/{id}', [TestController::class, 'update']);
+    Route::delete('deleteTest/{id}', [TestController::class, 'destroy']);
 
-Route::post('createQuestion', [QuestionController::class, 'store']);
-Route::put('updateQuestion/{id}', [QuestionController::class, 'update']);
-Route::delete('deleteQuestion/{id}', [QuestionController::class, 'destroy']);
+    Route::post('createQuestion', [QuestionController::class, 'store']);
+    Route::put('updateQuestion/{id}', [QuestionController::class, 'update']);
+    Route::delete('deleteQuestion/{id}', [QuestionController::class, 'destroy']);
 
-Route::post('createAnswer', [AnswerController::class, 'store']);
-Route::put('updateAnswer/{id}', [AnswerController::class, 'update']);
-Route::delete('deleteAnswer/{id}', [AnswerController::class, 'destroy']);
+    Route::post('createAnswer', [AnswerController::class, 'store']);
+    Route::put('updateAnswer/{id}', [AnswerController::class, 'update']);
+    Route::delete('deleteAnswer/{id}', [AnswerController::class, 'destroy']);
 
-Route::post('createClientAnswer', [ClientAnswersController::class, 'store']);
-Route::put('updateClientAnswer/{id}', [ClientAnswersController::class, 'update']);
-Route::delete('deleteClientAnswer/{id}', [ClientAnswersController::class, 'destroy']);
+    Route::post('createClientAnswer', [ClientAnswersController::class, 'store']);
+    Route::put('updateClientAnswer/{id}', [ClientAnswersController::class, 'update']);
+    Route::delete('deleteClientAnswer/{id}', [ClientAnswersController::class, 'destroy']);
 
-Route::post('createResult', [ResultController::class, 'store']);
-Route::put('updateResult/{id}', [ResultController::class, 'update']);
-Route::delete('deleteResult/{id}', [ResultController::class, 'destroy']);
-
+    Route::post('createResult', [ResultController::class, 'store']);
+    Route::put('updateResult/{id}', [ResultController::class, 'update']);
+    Route::delete('deleteResult/{id}', [ResultController::class, 'destroy']);
 });
 
 Route::get('getChapters', [ChapterController::class, 'index']);
@@ -87,6 +86,7 @@ Route::get('searchTest/{src}', [TestController::class, 'search']);
 
 Route::get('getQuestions', [QuestionController::class, 'index']);
 Route::get('showQuestion/{id}', [QuestionController::class, 'show']);
+Route::get('getTestQuestions/{id}', [QuestionController::class, 'getTestQuestions']);
 
 
 
@@ -110,12 +110,14 @@ Route::middleware('auth.client')->group(function () {
     Route::post('answerQuestion', [AuthClientAnswerController::class, 'answerQuestion']);
     Route::post('storeAnswers', [AuthClientAnswerController::class, 'storeAnswers']);
     Route::post('storeResult', [AuthClientAnswerController::class, 'storeResult']);
+    Route::get('getTestResults', [ClientAnswersController::class, 'getTestResults']);
+
 });
 Route::prefix('admin')->group(function () {
-    Route::post('signup',[AdminAuthController::class,'register']);
+    Route::post('signup', [AdminAuthController::class, 'register']);
 });
 
 
-Route::prefix('student')->group(function () {
-    Route::get('getProfile',[ProfileController::class,'getProfile']);
+Route::prefix('student')->middleware('auth.client')->group(function () {
+    Route::get('getProfile', [ProfileController::class, 'getProfile']);
 });
