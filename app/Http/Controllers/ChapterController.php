@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Chapter;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Psy\Readline\Hoa\Console;
 
 class ChapterController extends Controller
 {
@@ -29,7 +28,6 @@ class ChapterController extends Controller
         $fields = $request->validate([
             'chapt_number'=>'required|integer|unique:chapters'
         ]);
-        
         $chapter = Chapter::create($fields);
         return response()->json(["message"=>"Chapter created successfully",
                                  "chapter"=>$chapter]);
