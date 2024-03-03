@@ -59,7 +59,7 @@ class AnswerController extends Controller
         }
         if($request->correct)
         if($request->correct==true)
-        foreach ($question[0]->answers as $answers) {
+        foreach ($question->answers as $answers) {
             if($answers->correct==true)
             return response()->json(['Error'=>'There is already a correct answer']);
         }

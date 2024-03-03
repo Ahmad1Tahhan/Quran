@@ -82,8 +82,10 @@ class QuestionController extends Controller
         return response()->json(["Message"=>"Question deleted successfully.",
                                  "Decremented question count for test"=>$test->question_count]);
     }
-    public function getTestQuestions(Request $request,$id){
-        $questions = Question::with('answers')->where("test_id",$id)->where('client_id',$request->userId)->get();
+    public function getTestQuestions($id){
+        if(!Test::find($id))
+        return response("The test with the given id was not found.");
+        $questions = Question::with('answers')->where("test_id",$id)->get();
         if(sizeof($questions)==0){
             return response()->json("No questions found for that test.");
         }

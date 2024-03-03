@@ -67,7 +67,10 @@ class AuthClientAnswerController extends Controller
         $fields = $request->validate([
             'test_id'=>'integer|required',
             'answers'=>'array|required'
-        ]);    
+        ]);
+        $test = Test::find($fields['test_id']);
+        if(!$test)
+        return response()->json(["The test with the given id was not found."]);    
         foreach($fields['answers'] as $answer){
             if(!Answer::find($answer['answer_id']))
             return response()->json(['The answer with the given id was not found']);
@@ -85,7 +88,6 @@ class AuthClientAnswerController extends Controller
 
             if(!$isAnswerFound)
             return response()->json(['Error'=>'The answer you provided does not belong to that question.']);
-            
             client_answer::create([
                 'test_id'=>$request->test_id,
                 'client_id'=>$request->userId,

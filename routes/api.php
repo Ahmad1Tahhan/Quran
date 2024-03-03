@@ -106,18 +106,14 @@ Route::post('register', [AuthController::class, 'register']);
 
 
 //Authenticated user answer questions.
-Route::middleware('auth.client')->group(function () {
+Route::prefix("student")->middleware('auth.client')->group(function () {
     Route::post('answerQuestion', [AuthClientAnswerController::class, 'answerQuestion']);
     Route::post('storeAnswers', [AuthClientAnswerController::class, 'storeAnswers']);
     Route::post('storeResult', [AuthClientAnswerController::class, 'storeResult']);
     Route::get('getTestResults', [ClientAnswersController::class, 'getTestResults']);
-
+    Route::get('getProfile', [ProfileController::class, 'getProfile']);
 });
+
 Route::prefix('admin')->group(function () {
     Route::post('signup', [AdminAuthController::class, 'register']);
-});
-
-
-Route::prefix('student')->middleware('auth.client')->group(function () {
-    Route::get('getProfile', [ProfileController::class, 'getProfile']);
 });
