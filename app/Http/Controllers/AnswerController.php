@@ -15,9 +15,9 @@ class AnswerController extends Controller
             'question_id'=>'required|integer',
             'correct'=>'required|boolean'
         ]);
-        $question = Question::with('answers')->where('id','=',$request->question_id)->get();
+        $question = Question::with('answers')->where('id',$request->question_id)->first();
         if(!$question)
-        return response()->json(["Error"=>"The question with the given id was not found."]);
+        return response()->json(["Error"=>"The question with the given id was not found."],404);
         
         if($request->correct==true)
         foreach ($question[0]->answers as $answers) {
@@ -61,7 +61,7 @@ class AnswerController extends Controller
         if($request->correct==true)
         foreach ($question->answers as $answers) {
             if($answers->correct==true)
-            return response()->json(['Error'=>'There is already a correct answer']);
+            return response()->json(['Error'=>'There is already a correct answer'],400);
         }
         $answer->forceFill($fields);
         $answer->save();

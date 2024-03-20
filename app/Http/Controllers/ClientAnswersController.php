@@ -56,7 +56,7 @@ class ClientAnswersController extends Controller
         }
         if(!$isAnswerFound)
         return response()->json(['Error'=>'The answer you provided does not belong to that question.']);
-        $client = Client::with('client_answers')->get();
+        $client = Client::with('client_answers')->where('id',$request->client_id)->get();
         foreach($client[0]->client_answers as $client_answer){
             if($client_answer->test_id==$request->test_id && $client_answer->question_id ==$request->question_id)
             return response()->json(["Error" =>"Already submitted answer to that question."]);
@@ -64,7 +64,7 @@ class ClientAnswersController extends Controller
         
 
         $client_answer = client_answer::create($fields);
-        return response()->json(["Message"=>"Client answer created successfullly.","Client answer"=>$client_answer]);
+        return response()->json(["Message"=>"Client answer created successfully.","Client answer"=>$client_answer]);
     }
     public function index(){
         $client_answers = client_answer::all();

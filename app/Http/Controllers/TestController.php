@@ -47,11 +47,16 @@ class TestController extends Controller
             return response()->json(["Error" => "The test with the given id was not found."], 404);
         else {
             $fields = $request->validate([
-                'test_number' => 'integer|unique:tests',
+                'test_number' => 'integer',
                 'chapt_id' => 'integer',
                 'type' => 'string|in:quiz,exam',
                 'time' => 'integer'
             ]);
+            if($request->test_number!==$test->test_number){
+                $test = Test::where("test_number",$request->test_number)->first();
+                if($test)
+                return response()->json(["Error"=>"Test number was already taken."],400);
+            }
             if ($request->chapt_id) {
                 $chapter = Chapter::find($request->chapt_id);
                 if (!$chapter)
@@ -77,5 +82,12 @@ class TestController extends Controller
         if (sizeof($test) == 0)
             return response('not found');
         return response($test);
+    }
+    public function getTestForChapter($id)
+    {
+        $tests = Test::where('chapt_id', $id)->get();
+        if (sizeof($tests) == 0)
+            return response()->json("No tests attached for that chapter.");
+        return $tests;
     }
 }

@@ -15,7 +15,8 @@ class Client extends Authenticatable implements JWTSubject
     protected $fillable = [
         'username',
         'phone_number',
-        'role'
+        'role',
+        "password"
     ];
 
     public function getJWTIdentifier()

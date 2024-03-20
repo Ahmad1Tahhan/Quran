@@ -14,6 +14,7 @@ use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\InterpretationController;
 use App\Http\Controllers\Client\AuthClientAnswerController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\SmsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,16 +31,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('getClients', [ClientsController::class, 'index']);
 Route::middleware('auth.admin')->group(function () {
     Route::post('createClient', [ClientsController::class, 'store']);
-    Route::get('getClients', [ClientsController::class, 'index']);
     Route::get('showClient/{id}', [ClientsController::class, 'show']);
     Route::put('updateClient/{id}', [ClientsController::class, 'update']);
     Route::delete('deleteClient/{id}', [ClientsController::class, 'destroy']);
-
+    
+    
+    
     Route::post('createChapter', [ChapterController::class, 'store']);
-
-
     Route::put('updateChapter/{id}', [ChapterController::class, 'update']);
     Route::delete('deleteChapter/{id}', [ChapterController::class, 'destroy']);
 
@@ -81,13 +82,13 @@ Route::get('showChapter/{id}', [ChapterController::class, 'show']);
 
 Route::get('getTests', [TestController::class, 'index']);
 Route::get('showTest/{id}', [TestController::class, 'show']);
+Route::get('getChapterTests/{id}', [TestController::class, 'getTestForChapter']);
 //this is a test
 Route::get('searchTest/{src}', [TestController::class, 'search']);
 
 Route::get('getQuestions', [QuestionController::class, 'index']);
 Route::get('showQuestion/{id}', [QuestionController::class, 'show']);
 Route::get('getTestQuestions/{id}', [QuestionController::class, 'getTestQuestions']);
-
 
 
 Route::get('getAnswers', [AnswerController::class, 'index']);
@@ -100,7 +101,7 @@ Route::get('showClientAnswer/{id}', [ClientAnswersController::class, 'show']);
 Route::get('getResults', [ResultController::class, 'index']);
 Route::get('showResult/{id}', [ResultController::class, 'show']);
 
-
+Route::post('sendOtp',[SmsController::class,'sendOtp']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 
@@ -117,3 +118,4 @@ Route::prefix("student")->middleware('auth.client')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::post('signup', [AdminAuthController::class, 'register']);
 });
+Route::post('adminLogin',[AuthController::class,'adminLogin']);

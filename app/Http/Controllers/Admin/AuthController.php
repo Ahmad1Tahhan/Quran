@@ -13,12 +13,14 @@ class AuthController extends Controller
     public function register(Request $request){
         $fields = $request->validate([
             "username" => "required|string",
-            "phone_number" => "required|unique:clients|string|digits:10"
+            "phone_number" => "required|unique:clients|string|digits:10",
+            "password"=>"required|string"
         ]);
         $client = Client::where('phone_number', $request->phone_number)->first();
         if ($client)
             return response()->json(["Error" => "Phone number already taken"]);;
         $fields['role'] = 'admin';
+        $fields['password'] = bcrypt($request->password);
         $client = Client::create($fields);
         $token = JWTAuth::fromUser($client);
         return response()->json([
