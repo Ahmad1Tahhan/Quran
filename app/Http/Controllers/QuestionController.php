@@ -52,7 +52,7 @@ class QuestionController extends Controller
         if($request->test_id){
             $newTest = Test::find($request->test_id);
             if(!$newTest)
-            return response()->json(["The test with the given id was not found."]);
+            return response()->json(["The test with the given id was not found."],404);
             if($request->test_id===$newTest->id)
             goto label;
             $newTest->question_count++;

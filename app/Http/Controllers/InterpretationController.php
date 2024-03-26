@@ -14,10 +14,10 @@ class InterpretationController extends Controller
     public function index()
     {
         $interpretations = Interpretation::all();
-        if(sizeof($interpretations)==0) 
-            return response()->json(["message"=>"No interpretations found."]);
-        else    
-            return response()->json(["Interpretations"=>$interpretations]);
+        if (sizeof($interpretations) == 0)
+            return response()->json(["message" => "No interpretations found."]);
+        else
+            return response()->json(["Interpretations" => $interpretations]);
     }
 
     /**
@@ -26,11 +26,13 @@ class InterpretationController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'interp_number'=>'required|integer|unique:interpretations'
+            'interp_number' => 'required|integer|unique:interpretations'
         ]);
         $interpretation = Interpretation::create($fields);
-        return response()->json(["message"=>"Interpretation created successfully",
-                                                                                                         "interpretation"=>$interpretation]);
+        return response()->json([
+            "message" => "Interpretation created successfully",
+            "interpretation" => $interpretation
+        ]);
     }
 
     /**
@@ -39,10 +41,10 @@ class InterpretationController extends Controller
     public function show($id)
     {
         $interpretation = Interpretation::find($id);
-        if(!$interpretation)
-            return response()->json(["message"=>"The interpretation with the given id was not found."]);
+        if (!$interpretation)
+            return response()->json(["message" => "The interpretation with the given id was not found."]);
         else
-            return response()->json(["Interpretation"=>$interpretation]);
+            return response()->json(["Interpretation" => $interpretation]);
     }
 
     /**
@@ -51,17 +53,16 @@ class InterpretationController extends Controller
     public function update(Request $request, $id)
     {
         $interpretation = Interpretation::find($id);
-        if(!$interpretation)
-        return response()->json(["error"=>"The interpretation with the given id was not found."],404);
-        
+        if (!$interpretation)
+            return response()->json(["Error" => "The interpretation with the given id was not found."], 404);
+
         $fields = $request->validate([
-            'interp_number'=>'required|integer|unique:interpretations'
+            'interp_number' => 'required|integer|unique:interpretations'
         ]);
 
         $interpretation->forceFill($fields);
         $interpretation->save();
-        return response()->json(["message"=>"Interpretation updated successfully.","Interpretation"=>$interpretation]);
-        
+        return response()->json(["Message" => "Interpretation updated successfully.", "Interpretation" => $interpretation]);
     }
 
     /**
@@ -70,11 +71,11 @@ class InterpretationController extends Controller
     public function destroy(string $id)
     {
         $interpretation = Interpretation::find($id);
-        if(!$interpretation)
-        return response()->json(["error"=>"The interpretation with the given id was not found."],404);
-        else{
+        if (!$interpretation)
+            return response()->json(["error" => "The interpretation with the given id was not found."], 404);
+        else {
             $interpretation->delete();
-            return response()->json(["message"=>"Interpretation deleted successfully."]);
+            return response()->json(["message" => "Interpretation deleted successfully."]);
         }
     }
 }

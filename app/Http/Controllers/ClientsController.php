@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Date;
 
 class ClientsController extends Controller
 {
@@ -12,8 +13,16 @@ class ClientsController extends Controller
         $fields = $request->validate([
             'username' =>'required|min:3|max:20|string',
             'phone_number'=>'unique:clients|required|digits:10',
-            'role'=>'required|string|in:admin,student'
+            'role'=>'required|string|in:admin,student',
+            'gender'=>'required|string|in:male,female',
+            'birth'=>'required|string',
+            'city'=>'string',
+            'work'=>'string',
+            'email'=>'email',
         ]); 
+        $birth = strtotime($request->birth);
+        $birthFormat = date('Y-m-d',$birth);
+        $fields['birth'] = $birthFormat;
         $client = Client::create($fields);
         return response()->json(['message'=>'Client created successfully.','Client:'=>$client]);
     }

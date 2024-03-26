@@ -22,13 +22,11 @@ class AdminAuth
         try{
             $token = JWTAuth::parseToken()->checkOrFail();
             if(!$token)
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['Error' => 'Unauthorized'], 401);
             if($token['role']!='admin')
-            return response()->json(['Unauthorized'=>'Invalid role type.']);
-            // dd($token);
+            return response()->json(['Error'=>'Invalid role type.']);
             
             $request->userId = $token['sub'];
-            // dd($request->userId);
             return $next($request);
             }
             catch(TokenInvalidException $e){
@@ -38,8 +36,7 @@ class AdminAuth
                 return response()->json(["Error"=>"Token expired."]);
             }
             catch(Exception $e){
-                return response()->json(["Unauthorized"=>"Invalid token",
-                                         "Error"=>$e->getMessage()]);
+                return response()->json(["Error"=>"Invalid token."]);
             }
     }
 }

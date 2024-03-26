@@ -9,4 +9,7 @@ class Interpretation extends Model
 {
     use HasFactory;
     protected $fillable = ['interp_number'];
+    public function collections(){
+        return $this->hasMany(Collection::class,'interpretation_id');
+    }
 }

@@ -16,7 +16,13 @@ class Client extends Authenticatable implements JWTSubject
         'username',
         'phone_number',
         'role',
-        "password"
+        'password',
+        'gender',
+        'birth',
+        'city',
+        'work',
+        'email',
+        'otp'
     ];
 
     public function getJWTIdentifier()

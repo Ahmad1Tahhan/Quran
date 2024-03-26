@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('type')->nullable(false);
             $table->integer('question_count')->nullable(false)->default(0);
             $table->integer('time')->nullable(true);
-            $table->foreignId('chapt_id')->references('id')->on('chapters')->onDelete('cascade');
+            $table->foreignId('chapt_id')->nullable(true)->references('id')->on('chapters')->onDelete('cascade');
+            $table->foreignId('collection_id')->nullable(true)->references('id')->on('collections')->onDelete('cascade');
             $table->timestamps();
         });
     }
