@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
-    
-    
+
+
     public function adminLogin(Request $request)
     {
         $fields = $request->validate([
@@ -45,7 +45,7 @@ class AuthController extends Controller
         ]);
         $client = Client::where('phone_number', $request->phone_number)->first();
         if ($client)
-            return response()->json(["Error" => "Phone number already taken"],400);
+            return response()->json(["Error" => "Phone number already taken"], 400);
         $fields['role'] = 'student';
         $otp = rand(1000, 9999);
         $fields['otp'] = $otp;
@@ -57,7 +57,7 @@ class AuthController extends Controller
         $client = Client::create($fields);
         return response()->json(["message" => "Otp sent successfully."], 200);
     }
-    
+
     public function verifyOtp(Request $request)
     {
         $fields = $request->validate([
@@ -78,7 +78,8 @@ class AuthController extends Controller
             ]
         ]);
     }
-    public function continueSignUp(Request $request){
+    public function continueSignUp(Request $request)
+    {
         $fields = $request->validate([
             'username' => 'required|string',
             'gender' => 'required|string|in:male,female',
@@ -86,25 +87,26 @@ class AuthController extends Controller
             'city' => 'required|string',
             'work' => 'string',
             'email' => 'email',
-            'image'=>"string"
+            'image' => "string"
         ]);
         $client = Client::find($request->userId);
         if (!$client)
             return response()->json(["Error" => "Client not found. Please sign up again."], 404);
-        $birth = strtotime($request->birth);
+        $birth = strtotime(str_replace('/', '-', $request->birth));
         $birthFormat = date('Y-m-d', $birth);
         $fields['birth'] = $birthFormat;
         $client->forceFill($fields);
         $client->save();
-        return response()->json(["Success"=>"Signed up successfully.","Client"=>$client]);
+        return response()->json(["Success" => "Signed up successfully.", "Client" => $client]);
     }
-    public function resendOtp(Request $request){
+    public function resendOtp(Request $request)
+    {
         $fields = $request->validate([
             "phone_number" => "required|string"
         ]);
         $client = Client::where('phone_number', $request->phone_number)->first();
         if (!$client)
-            return response()->json(["Error" => "Couldn't find number."],404);
+            return response()->json(["Error" => "Couldn't find number."], 404);
         $fields['role'] = 'student';
         $otp = rand(1000, 9999);
         $fields['otp'] = $otp;

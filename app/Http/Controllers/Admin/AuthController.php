@@ -19,7 +19,7 @@ class AuthController extends Controller
             "birth"=>"required|string",
             "city"=>"required|string"
         ]);
-        $birth = strtotime($request->birth);
+        $birth = strtotime(str_replace('/','-',$request->birth));
         $birthFormat = date('Y-m-d',$birth);
         $fields['birth'] = $birthFormat;
         $client = Client::where('phone_number', $request->phone_number)->first();
