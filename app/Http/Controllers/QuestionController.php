@@ -16,7 +16,7 @@ class QuestionController extends Controller
         ]);
         $test = Test::find($request->test_id);
         if(!$test)
-        return response()->json(['Error'=>'The test with the given id was not found'],404);
+        return response()->json(['message'=>'The test with the given id was not found'],404);
         
         $question= Question::create($fields);
         $test->question_count++;
@@ -28,21 +28,21 @@ class QuestionController extends Controller
     public function index(){
         $questions = Question::with('answers')->get();
         if(sizeof($questions)==0)
-        return response()->json(['Error'=>'No questions found']);
+        return response()->json(['message'=>'No questions found']);
         else
         return response()->json(["Questions"=>$questions]);
     }
     public function show($id){
         $question = Question::with('answers')->where('id',$id)->get()->first();
         if(!$question)
-        return response()->json(["Error"=>"The question with the given id was not found."]);
+        return response()->json(["message"=>"The question with the given id was not found."]);
         else
         return response()->json(["Question"=>$question]);
     }
     public function update(Request $request,$id){
         $question = Question::find($id);
         if(!$question)
-        return response()->json(["Error"=>"The question with the given id was not found."]);
+        return response()->json(["message"=>"The question with the given id was not found."],404);
         $fields = $request->validate([
             "question_text"=>"string",
             "test_id"=>"integer"
@@ -52,7 +52,7 @@ class QuestionController extends Controller
         if($request->test_id){
             $newTest = Test::find($request->test_id);
             if(!$newTest)
-            return response()->json(["The test with the given id was not found."],404);
+            return response()->json(["message"=>"The test with the given id was not found."],404);
             if($request->test_id===$newTest->id)
             goto label;
             $newTest->question_count++;

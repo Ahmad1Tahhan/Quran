@@ -22,7 +22,7 @@ class ClientsController extends Controller
             'email' => 'email',
         ]);
 
-        $birth = strtotime(str_replace('/','-',$request->birth));
+        $birth = strtotime(str_replace('/', '-', $request->birth));
         $birthFormat = date('Y-m-d', $birth);
         $fields['birth'] = $birthFormat;
         if ($fields['role'] === 'admin') {
@@ -58,17 +58,33 @@ class ClientsController extends Controller
     {
         $fields = $request->validate([
             'username' => 'min:3|max:20|string',
-            'phone_number' => 'string'
+            'phone_number' => 'string',
+            'role' => 'string|in:admin,student',
+            'gender' => 'string|in:male,female',
+            'birth' => 'string',
+            'city',
+            'email',
+            'work',
         ]);
-        $client = Client::find($id);
+        if ($request->work)
+            $fields['work'] = $request->work;
+        if ($request->city)
+            $fields['city'] = $request->city;
+        if ($request->email)
+            $fields['email'] = $request->email;
+        $birth = strtotime(str_replace('/', '-', $request->birth));
+        $birthFormat = date('Y-m-d', $birth);
+        $fields['birth'] = $birthFormat;
+        $client = Client::find($id);      
         if (!$client)
-            return response()->json(["message:" => "The client requested with the given id was not found."], 404);
-        else
-            $client->forceFill($fields);
+            return response()->json(["message" => "The client requested with the given id was not found."], 404);
+
+        $client->forceFill($fields);
         $client->save();
+        
         return response()->json([
-            "message:" => "Client updated successfully.",
-            "Client:" => $client
+            "message" => "Client updated successfully.",
+            "Client" => $client
         ]);
     }
 

@@ -22,15 +22,15 @@ class TestController extends Controller
             'time' => 'integer',
             'name'=>'string|required'
         ]);
-        if (($request->chapt_id && $request->collection_id) && (!$request->chapt_id && $request->collection_id))
-            return response()->json(["Error" => "Either chapt_id or collection_id required and NOT BOTH."]);
+        if (($request->chapt_id && $request->collection_id) || (!$request->chapt_id && !$request->collection_id))
+            return response()->json(["message" => "Either chapt_id or collection_id required and NOT BOTH."],400);
         if ($request->chapt_id)
             if (!Chapter::find($request->chapt_id))
-                return response()->json(["Error" => "The chapter with the given id was not found."], 404);
+                return response()->json(["message" => "The chapter with the given id was not found."], 404);
                 
         if ($request->collection)
             if (!Collection::find($request->collection_id))
-                return response()->json(["Error" => "The collection with the given id was not found."], 404);
+                return response()->json(["message" => "The collection with the given id was not found."], 404);
 
         $test = Test::create($fields);
         return response()->json(["message" => "Created test successfully.", "Test" => $test]);

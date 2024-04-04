@@ -17,12 +17,12 @@ class AnswerController extends Controller
         ]);
         $question = Question::with('answers')->where('id',$request->question_id)->first();
         if(!$question)
-        return response()->json(["Error"=>"The question with the given id was not found."],404);
+        return response()->json(["message"=>"The question with the given id was not found."],404);
         
         if($request->correct==true)
         foreach ($question->answers as $answers) {
             if($answers->correct==true)
-            return response()->json(['Error'=>'There is already a correct answer']);
+            return response()->json(['message'=>'There is already a correct answer']);
         }
 
         $answer = Answer::create($fields);
@@ -51,17 +51,17 @@ class AnswerController extends Controller
         ]);
         $answer = Answer::find($id);
         if(!$answer)
-        return response()->json(["Error"=>"The answer with the given id was not found."],404);
+        return response()->json(["message"=>"The answer with the given id was not found."],404);
         if($request->question_id){
             $question = Question::find($request->question_id);
             if(!$question)
-            return response()->json(["Error"=>"The question with the given id was not found."],404);   
+            return response()->json(["message"=>"The question with the given id was not found."],404);   
         }
         if($request->correct)
         if($request->correct==true)
         foreach ($question->answers as $answers) {
             if($answers->correct==true)
-            return response()->json(['Error'=>'There is already a correct answer'],400);
+            return response()->json(['message'=>'There is already a correct answer'],400);
         }
         $answer->forceFill($fields);
         $answer->save();
