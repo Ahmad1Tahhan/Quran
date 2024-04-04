@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('test_number')->nullable(false);
             $table->string('type')->nullable(false);
+            $table->string('name')->nullable(false);
             $table->integer('question_count')->nullable(false)->default(0);
             $table->integer('time')->nullable(true);
             $table->foreignId('chapt_id')->nullable(true)->references('id')->on('chapters')->onDelete('cascade');

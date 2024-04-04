@@ -63,4 +63,8 @@ class CollectionController extends Controller
         $collection->delete();
         return response()->json(["Message" => "Collection deleted successfully."]);
     }
+    public function getCollectionWithQuestions(){
+        $collections = Collection::with('tests')->get();
+        return $collections;
+    }
 }

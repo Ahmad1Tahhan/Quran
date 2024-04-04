@@ -72,8 +72,23 @@ Route::middleware('auth.admin')->group(function () {
     Route::post('createCollection', [CollectionController::class, 'store']);
     Route::put('updateCollection/{id}', [CollectionController::class, 'update']);
     Route::delete('deleteCollection/{id}', [CollectionController::class, 'destroy']);
+    Route::get('getTests', [TestController::class, 'index']);
+    Route::get('getPreviousResults',[ResultController::class,'getPreviousResultsForTest']);
+    Route::get('getProfile', [ProfileController::class, 'getProfile']);
 });
 
+Route::middleware('auth.client')->group(function () {
+    Route::post('answerQuestion', [AuthClientAnswerController::class, 'answerQuestion']);
+    Route::post('storeAnswers', [AuthClientAnswerController::class, 'storeAnswers']);
+    Route::post('storeResult', [AuthClientAnswerController::class, 'storeResult']);
+    Route::get('getTestResults', [ClientAnswersController::class, 'getTestResults']);
+    Route::get('getProfile', [ProfileController::class, 'getProfile']);
+    Route::post('continueSignUp', [AuthController::class, 'continueSignUp']);
+    Route::get('getTests', [TestController::class, 'index']);
+    Route::get('getPreviousResults/{id}',[ResultController::class,'getPreviousResultsForTest']);
+    Route::post('createResult', [ResultController::class, 'store']);
+
+});
 Route::get('getChapters', [ChapterController::class, 'index']);
 Route::get('showChapter/{id}', [ChapterController::class, 'show']);
 
@@ -115,16 +130,9 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::get('getCollections', [CollectionController::class, 'index']);
 Route::get('showCollection/{id}', [CollectionController::class, 'show']);
-
+Route::get('getCollectionWithTest',[CollectionController::class,'getCollectionWithQuestions']);
 //Authenticated user answer questions.
-Route::prefix("student")->middleware('auth.client')->group(function () {
-    Route::post('answerQuestion', [AuthClientAnswerController::class, 'answerQuestion']);
-    Route::post('storeAnswers', [AuthClientAnswerController::class, 'storeAnswers']);
-    Route::post('storeResult', [AuthClientAnswerController::class, 'storeResult']);
-    Route::get('getTestResults', [ClientAnswersController::class, 'getTestResults']);
-    Route::get('getProfile', [ProfileController::class, 'getProfile']);
-    Route::post('continueSignUp', [AuthController::class, 'continueSignUp']);
-});
+
 
 Route::prefix('admin')->group(function () {
     Route::post('signup', [AdminAuthController::class, 'register']);

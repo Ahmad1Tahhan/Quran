@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chapter;
 use App\Models\Collection;
+use App\Models\Result;
 use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,7 +19,8 @@ class TestController extends Controller
             'chapt_id' => 'integer',
             'collection_id' => 'integer',
             'type' => 'required|string|in:quiz,exam',
-            'time' => 'integer'
+            'time' => 'integer',
+            'name'=>'string|required'
         ]);
         if (($request->chapt_id && $request->collection_id) && (!$request->chapt_id && $request->collection_id))
             return response()->json(["Error" => "Either chapt_id or collection_id required and NOT BOTH."]);
@@ -33,13 +35,20 @@ class TestController extends Controller
         $test = Test::create($fields);
         return response()->json(["message" => "Created test successfully.", "Test" => $test]);
     }
-    public function index()
+    public function index(Request $request)
     {
         $tests = Test::all();
         if (sizeof($tests) == 0)
             return response()->json(["Error" => "No tests found."], 404);
-        else
-            return response()->json(["Tests" => $tests]);
+        else{
+        if($request->userId)
+        foreach($tests as $test){
+            $result = Result::where('test_id',$test->id)->where('client_id',$request->userId)->first();
+            if($result)
+                $test->previous_result = true;
+        }
+        return $tests;
+        }
     }
     public function show($id)
     {
@@ -59,7 +68,8 @@ class TestController extends Controller
                 'test_number' => 'integer',
                 'chapt_id' => 'integer',
                 'type' => 'string|in:quiz,exam',
-                'time' => 'integer'
+                'time' => 'integer',
+                'name'=>'string'
             ]);
             if ($request->test_number !== $test->test_number) {
                 $test = Test::where("test_number", $request->test_number)->first();

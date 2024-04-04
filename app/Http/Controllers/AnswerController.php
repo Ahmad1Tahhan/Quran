@@ -20,7 +20,7 @@ class AnswerController extends Controller
         return response()->json(["Error"=>"The question with the given id was not found."],404);
         
         if($request->correct==true)
-        foreach ($question[0]->answers as $answers) {
+        foreach ($question->answers as $answers) {
             if($answers->correct==true)
             return response()->json(['Error'=>'There is already a correct answer']);
         }
