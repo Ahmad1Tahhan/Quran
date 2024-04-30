@@ -45,8 +45,9 @@ class TestController extends Controller
         foreach($tests as $test){
             $result = Result::where('test_id',$test->id)->where('client_id',$request->userId)->first();
             if($result){
-                $previous_result = Result::where('client_id',$request->userId)->where('test_id',$test->id)->first();
-                $test->previous_result = $previous_result;// get previous score
+                $test->previous_result = $result;// get previous score
+            }else{
+                $test->previous_result = 'none';
             }
         }
         return $tests;

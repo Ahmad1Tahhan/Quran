@@ -38,8 +38,8 @@ Route::middleware('auth.admin')->group(function () {
     Route::get('showClient/{id}', [ClientsController::class, 'show']);
     Route::put('updateClient/{id}', [ClientsController::class, 'update']);
     Route::delete('deleteClient/{id}', [ClientsController::class, 'destroy']);
-
-
+    Route::post('uploadQuestions',[QuestionController::class,'uploadQuestions']);
+    Route::post('uploadQuestionsJson',[QuestionController::class,'uploadQuestionsJson']);
 
     Route::post('createChapter', [ChapterController::class, 'store']);
     Route::put('updateChapter/{id}', [ChapterController::class, 'update']);
@@ -101,7 +101,7 @@ Route::get('getInterpretations', [InterpretationController::class, 'index']);
 Route::get('showInterpretation/{id}', [InterpretationController::class, 'show']);
 
 
-Route::get('getTests', [TestController::class, 'index']);
+// Route::get('getTests', [TestController::class, 'index']);
 Route::get('showTest/{id}', [TestController::class, 'show']);
 Route::get('getChapterTests/{id}', [TestController::class, 'getTestForChapter']);
 //this is a test

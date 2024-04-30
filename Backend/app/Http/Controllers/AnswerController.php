@@ -58,10 +58,13 @@ class AnswerController extends Controller
             return response()->json(["message"=>"The question with the given id was not found."],404);   
         }
         if($request->correct)
-        if($request->correct==true)
-        foreach ($question->answers as $answers) {
-            if($answers->correct==true)
-            return response()->json(['message'=>'There is already a correct answer'],400);
+        if($request->correct==true){
+            $answers = Answer::where('question_id',$answer->question_id)->get();
+            foreach ($answers as $answer_in) {
+                if($answer_in->correct==true&&$answer_in->id!=$answer->id)
+                return response()->json(['message'=>'There is already a correct answer'],400);
+            }
+
         }
         $answer->forceFill($fields);
         $answer->save();
