@@ -131,26 +131,28 @@ class QuestionController extends Controller
                 'question_text' => $data[$i]["question_text"],
                 'test_id' => $test->id
             ]);
+            $test->question_count++;
+            $test->save();
             $correctA = false;
             $correctB = false;
             $correctC = false;
-            if ($data[$i]['correct'] === "A")
+            if ($data[$i]['correct'] === "A"||$data[$i]['correct'] === "a")
                 $correctA = true;
-            if ($data[$i]['correct'] === "B")
+            if ($data[$i]['correct'] === "B"||$data[$i]['correct'] === "b")
                 $correctB = true;
-            if ($data[$i]['correct'] === "C")
+            if ($data[$i]['correct'] === "C"||$data[$i]['correct'] === "c")
                 $correctC = true;
-            $answer1 = Answer::create([
+            Answer::create([
                 'answer_text' => $data[$i]["answer_a"],
                 'correct' => $correctA,
                 'question_id' => $question->id
             ]);
-            $answer2 = Answer::create([
+            Answer::create([
                 'answer_text' => $data[$i]["answer_b"],
                 'correct' => $correctB,
                 'question_id' => $question->id
             ]);
-            $answer2 = Answer::create([
+            Answer::create([
                 'answer_text' => $data[$i]["answer_c"],
                 'correct' => $correctC,
                 'question_id' => $question->id

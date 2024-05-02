@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function register(Request $request){
         $fields = $request->validate([
             "username" => "required|string",
-            "phone_number" => "required|unique:clients|string|digits:10",
+            "phone_number" => "required|unique:clients|string",
             "password"=>"required|string",
             "gender"=>"required|string|in:male,female",
             "birth"=>"required|string",
